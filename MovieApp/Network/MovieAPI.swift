@@ -11,9 +11,9 @@ import Alamofire
 
 class MovieAPI{
     
-    func getMoviesDB(resultRequest: @escaping (_ result:MovieRequest?, _ erro: NSError?) -> Void) -> Void{
+    func getMoviesDB(page: Int,resultRequest: @escaping (_ result:MovieRequest?, _ erro: NSError?) -> Void) -> Void{
 
-        let url = "https://api.themoviedb.org/3/discover/movie?api_key=78d18177e09e391603fe96ec4d22f884"
+        let url = "https://api.themoviedb.org/3/discover/movie?api_key=78d18177e09e391603fe96ec4d22f884&page=\(page)"
 
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.response?.statusCode == 200{

@@ -11,12 +11,14 @@ import UIKit
 class HomeViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
+    let tot : MovieRequest? = nil
     var selected:Int = 0
     var datamanager = DataManager()
     var controller = MovieController()
     var favoriteArray: [MovieFavorite] = []
-
+    var page: Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,8 +26,11 @@ class HomeViewController: UIViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "HomeCell", bundle: nil), forCellWithReuseIdentifier: "HomeCell")
-        
-        controller.getMoviesAPI { (sucesso) in
+        loadData()
+    }
+    
+    func loadData(){
+        controller.getMoviesAPI(page: page) { (sucesso) in
             if sucesso {
                 self.collectionView.reloadData()
             }else{
@@ -33,7 +38,6 @@ class HomeViewController: UIViewController {
             }
         }
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -55,6 +59,15 @@ class HomeViewController: UIViewController {
                 let ind = sender as! Int
                 vc.movie = controller.arrayMovieDB[ind]
             }
+        }
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == controller.arrayMovieDB.count - 10 && controller.arrayMovieDB.count != tot?.totalResult  {
+            self.page += 1
+            self.loadData()
+            print("ok")
         }
     }
 }

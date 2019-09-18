@@ -11,18 +11,17 @@ import Foundation
 class MovieController{
     
     var movieAPI = MovieAPI()
-    
     var arrayMovieDB: [Movie] = []
+    var page: Int = 1
     
-    
-    func getMoviesAPI(completion: @escaping (Bool)-> Void){
-    
-        movieAPI.getMoviesDB { (moviesDB, error) in
+    func getMoviesAPI(page: Int,completion: @escaping (Bool)-> Void){
+        self.page = page
+        movieAPI.getMoviesDB(page: page) { (moviesDB, error) in
             if error != nil{
                 completion(false)
                 print("Deu ruim")
             }else{
-                self.arrayMovieDB = moviesDB?.results ?? []
+                self.arrayMovieDB.append(contentsOf: moviesDB?.results ?? [])
                 completion(true)
             }
         }
